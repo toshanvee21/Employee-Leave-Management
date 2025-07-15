@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import { Container, TextField, Button, Typography, Box, Stack, Alert, Paper } from '@mui/material';
+
+const Register = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    position: '',
+    address: '',
+  });
+  
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Simple validation
+    if (!formData.name || !formData.email || !formData.phone || !formData.position || !formData.address) {
+      setError('All fields are required!');
+      return;
+    }
+
+    // Email validation (basic check)
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(formData.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    // Phone number validation (basic length check)
+    if (formData.phone.length < 10) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
+    // Reset errors and show success message
+    setError('');
+    setSuccessMessage('Employee Registered Successfully!');
+    
+    // Clear form fields
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      position: '',
+      address: '',
+    });
+  };
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 5 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Employee Registration
+      </Typography>
+
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}> {/* Paper for Box effect */}
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+          {error && <Alert severity="error">{error}</Alert>} {/* Display error message */}
+          {successMessage && <Alert severity="success">{successMessage}</Alert>} {/* Display success message */}
+
+          <Stack spacing={2}>
+            <TextField
+              label="Full Name"
+              variant="outlined"
+              fullWidth
+              required
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Email Address"
+              variant="outlined"
+              fullWidth
+              required
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Phone Number"
+              variant="outlined"
+              fullWidth
+              required
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Position"
+              variant="outlined"
+              fullWidth
+              required
+              name="position"
+              value={formData.position}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Address"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={3}
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+
+            <Button type="submit" variant="contained" color="primary" size="large">
+              Register
+            </Button>
+          </Stack>
+        </Box>
+      </Paper>
+    </Container>
+  );
+};
+
+export default Register;
+
+
+
+
+
+
+import React from 'react'
+import Dashboard from './Dashboard'
+import Profile from './Profile'
+import Project from './Project'
+import Login from './Login'
+import { Route, Routes } from 'react-router-dom'
+import MyAppBar from './MyAppBar'
+import Leave from './Leave'
+import Register from './Register'
+
+const MyRoutes = () => {
+    return (
+        <div> 
+            <MyAppBar/>
+            <Routes>
+                <Route path='/' element={<Dashboard/>} />
+                <Route path='/profile' element={<Profile/>} />
+                <Route path='/project' element={<Project/>} />
+                <Route path='/register' element={<Register/>} />
+                <Route path='/leave' element={<Leave/>} />
+                <Route path='/login' element={<Login/>} />
+              
+               
+              
+                
+            </Routes>
+            
+    
+        </div>
+      )
+    }
+
+export default MyRoutes
